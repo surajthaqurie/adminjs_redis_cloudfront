@@ -3,7 +3,7 @@ import { Components } from "../frontend/components";
 import { checkEditGameUniqueFields, checkGameUniqueFields, gameValidation } from "../frontend/validations";
 import { galleryImagesName, imageName, payloadTrim, slugify } from "../hooks";
 import { DMMFClass, prisma } from "../utility";
-import { admin_seo_resource, delete_guard, image_properties, image_validation, localProvider, og_types } from "./helper.resources";
+import { admin_seo_resource, delete_guard, image_properties, image_validation, AWScredentials, og_types } from "./helper.resources";
 import uploadFeature from "@adminjs/upload";
 
 const game_resource = {
@@ -73,13 +73,13 @@ const game_resource = {
   },
   features: [
     uploadFeature({
-      provider: { local: localProvider },
+      provider: { aws: AWScredentials },
       validation: image_validation,
       properties: image_properties,
-      uploadPath: (record: any, filename: string) => `/game/${record.id()}~~${filename}`
+      uploadPath: (record: any, filename: string) => `${(process.env.APP_NAME as string).toLowerCase()}/game/${record.id()}_${filename}`
     }),
     uploadFeature({
-      provider: { local: localProvider },
+      provider: { aws: AWScredentials },
       validation: image_validation,
       properties: {
         file: "gallery",
@@ -92,7 +92,7 @@ const game_resource = {
         filesToDelete: "gallery.filesToDelete"
       },
       multiple: true,
-      uploadPath: (record: any, filename: string) => `/game_gallery/${record.id()}~~${filename}`
+      uploadPath: (record: any, filename: string) => `${(process.env.APP_NAME as string).toLowerCase()}/game_gallery/${record.id()}_${filename}`
     })
   ]
 };

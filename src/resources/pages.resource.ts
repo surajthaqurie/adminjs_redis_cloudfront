@@ -3,7 +3,7 @@ import { Components } from "../frontend/components";
 import { checkEditPageUniqueFields, checkPageUniqueFields, pageResponseMessage, pageValidation } from "../frontend/validations";
 import { imageName, payloadTrim, prismaSaveNullDataToUndefined, slugify } from "../hooks";
 import { DMMFClass, prisma } from "../utility";
-import { admin_seo_resource, delete_guard, image_properties, image_validation, localProvider, og_types } from "./helper.resources";
+import { admin_seo_resource, delete_guard, image_properties, image_validation, AWScredentials, og_types } from "./helper.resources";
 import uploadFeature from "@adminjs/upload";
 
 const page_resource = {
@@ -82,10 +82,10 @@ const page_resource = {
   },
   features: [
     uploadFeature({
-      provider: { local: localProvider },
+      provider: { aws: AWScredentials },
       validation: image_validation,
       properties: image_properties,
-      uploadPath: (record: any, filename: string) => `/pages/${record.id()}~~${filename}`
+      uploadPath: (record: any, filename: string) => `${(process.env.APP_NAME as string).toLowerCase()}/pages/${record.id()}_${filename}`
     })
   ]
 };

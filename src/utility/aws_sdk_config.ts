@@ -1,6 +1,6 @@
 import { S3Client, ListObjectsCommand } from "@aws-sdk/client-s3";
 
-export const S3Config = () => {
+const S3Config = () => {
   try {
     const AWS_ACCESS_KEY_ID = process.env.AWS_ACCESS_KEY_ID || null;
     const AWS_SECRET_ACCESS_KEY = process.env.AWS_SECRET_ACCESS_KEY || null;
@@ -39,3 +39,5 @@ export const getObjects = async () => {
 
   return response;
 };
+
+export default S3Config;

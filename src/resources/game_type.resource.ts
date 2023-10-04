@@ -1,5 +1,5 @@
 import { DMMFClass, prisma } from "../utility";
-import { admin_seo_resource, delete_guard, image_properties, image_validation, localProvider } from "./helper.resources";
+import { AWScredentials, admin_seo_resource, delete_guard, image_properties, image_validation } from "./helper.resources";
 import { checkEditGameTypesUniqueFields, checkGameTypesUniqueFields, gameTypesValidation } from "../frontend/validations";
 import { imageName, payloadTrim, slugify } from "../hooks";
 import { Components } from "../frontend/components";
@@ -103,10 +103,10 @@ const game_type_resource = {
   },
   features: [
     uploadFeature({
-      provider: { local: localProvider },
+      provider: { aws: AWScredentials },
       validation: image_validation,
       properties: image_properties,
-      uploadPath: (record: any, filename: string) => `/game_types/${record.id()}~~${filename}`
+      uploadPath: (record: any, filename: string) => `${(process.env.APP_NAME as string).toLowerCase()}/game_types/${record.id()}_${filename}`
     })
   ]
 };
