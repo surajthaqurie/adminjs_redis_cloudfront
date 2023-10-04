@@ -1,0 +1,11 @@
+# Keep environment variables out of version control
+.adminjs
+node_modules
+
+.env
+.env.*
+!.env.sample
+
+public/**/*
+!public/*.css
+!public/*.png

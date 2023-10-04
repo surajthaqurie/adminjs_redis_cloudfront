@@ -1,0 +1,128 @@
+generator client {
+  provider   = "prisma-client-js"
+  engineType = "binary"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Users {
+  id        String   @id @unique @default(uuid())
+  name      String
+  email     String   @unique
+  password  String
+  role      Role
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Pages {
+  id                     String   @id @unique @default(uuid())
+  name                   String
+  slug                   String   @unique
+  image                  Json?
+  image_alternative_text String
+  description            String
+  meta_title             String?
+  meta_description       String?
+  og_title               String?
+  og_description         String?
+  og_url                 String?
+  og_type                OG_TYPE?
+  keywords               String?
+  canonical_link         String?
+  sections               Json?
+  meta_box               Json?
+  createdAt              DateTime @default(now())
+  updatedAt              DateTime @updatedAt
+}
+
+model Games {
+  id                       String   @id @unique @default(uuid())
+  name                     String
+  slug                     String   @unique
+  image                    Json?
+  image_alternative_text   String
+  description              String
+  orders                   Int?
+  meta_title               String?
+  meta_description         String?
+  og_title                 String?
+  og_description           String?
+  og_url                   String?
+  og_type                  OG_TYPE?
+  keywords                 String?
+  canonical_link           String?
+  gallery                  Json?
+  gallery_alternative_text String
+  youtube_link             String?
+  createdAt                DateTime @default(now())
+  updatedAt                DateTime @updatedAt
+
+  game_type      String
+  GameTypes      GameTypes        @relation(fields: [game_type], references: [id], onDelete: Cascade)
+  GameByCategory GameByCategory[]
+}
+
+model GameTypes {
+  id                     String   @id @unique @default(uuid())
+  name                   String
+  slug                   String   @unique
+  image                  Json?
+  image_alternative_text String
+  description            String
+  orders                 Int?
+  meta_title             String?
+  meta_description       String?
+  og_title               String?
+  og_description         String?
+  og_url                 String?
+  og_type                OG_TYPE?
+  keywords               String?
+  cannonical_link        String?
+  createdAt              DateTime @default(now())
+  updatedAt              DateTime @updatedAt
+
+  Games Games[]
+}
+
+model GameCategory {
+  id             String           @id @unique @default(uuid())
+  name           String
+  slug           String           @unique
+  createdAt      DateTime         @default(now())
+  updatedAt      DateTime         @updatedAt
+  GameByCategory GameByCategory[]
+}
+
+model GameByCategory {
+  id         String   @id @unique @default(uuid())
+  gameId     String
+  categoryId String
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  GameCategory GameCategory @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+  Game         Games        @relation(fields: [gameId], references: [id], onDelete: Cascade)
+}
+
+model session {
+  sid    String   @id @db.VarChar
+  sess   Json     @db.Json
+  expire DateTime @db.Timestamp(6)
+
+  @@index([expire], map: "IDX_session_expire")
+}
+
+enum OG_TYPE {
+  WEBSITE
+  MOBILE
+}
+
+enum Role {
+  ADMIN
+  EDITOR
+  SEO
+}
