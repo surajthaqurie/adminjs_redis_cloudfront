@@ -1,17 +1,15 @@
+import { SEARCH_TYPE_CONSTANT, TABLE_NAME_CONSTANT } from "src/constant";
 import { IGameByCategory, IGameInCategory, IPaginationResponse } from "src/interfaces";
-import { prisma, paginated_query } from "src/utility";
+import { prisma, getKey, getSearchResponse, customGameByCategoryResponse } from "src/utility";
 const { gameCategory: GameCategory } = prisma;
 
-const getGameCategories = async (
-  page: number,
-  itemNo: number
-): Promise<IPaginationResponse<IGameInCategory>> => {
-  const pagination_query = paginated_query(page, itemNo);
+const getGameCategories = async (page: number, itemNo: number): Promise<IPaginationResponse<IGameInCategory>> => {
+  // const pagination_query = paginated_query(page, itemNo);
 
   const [count, game_categories] = await prisma.$transaction([
     GameCategory.count(),
     GameCategory.findMany({
-      ...pagination_query,
+      // ...pagination_query,
       include: {
         GameByCategory: {
           select: {
@@ -44,20 +42,26 @@ const getGameCategories = async (
   };
 };
 
-const getGamesByCategory = async (
-  slug: string,
-  page: number,
-  itemNo: number
-): Promise<IPaginationResponse<IGameByCategory>> => {
-  const pagination_query = paginated_query(page, itemNo);
+const getGamesByCategory = async (slug: string, page: number, itemNo: number): Promise<IPaginationResponse<IGameByCategory>> => {
+  // const pagination_query = paginated_query(page, itemNo);
 
+  const key = getKey(TABLE_NAME_CONSTANT.Games, SEARCH_TYPE_CONSTANT.GAME_CATEGORY);
+  const cached_data = await getSearchResponse(key, slug);
+  if (cached_data) {
+    return {
+      //@ts-expect-error
+      data: cached_data,
+      total_count: cached_data.length
+    };
+  }
   const [count, games] = await prisma.$transaction([
     GameCategory.count({ where: { slug } }),
     GameCategory.findMany({
-      ...pagination_query,
+      // ...pagination_query,
       where: { slug },
       select: {
         name: true,
+        slug: true,
         GameByCategory: {
           select: {
             Game: true
@@ -67,8 +71,9 @@ const getGamesByCategory = async (
     })
   ]);
 
+  const custom_data = await customGameByCategoryResponse(key, slug, games);
   return {
-    data: games,
+    data: custom_data,
     total_count: count
   };
 };

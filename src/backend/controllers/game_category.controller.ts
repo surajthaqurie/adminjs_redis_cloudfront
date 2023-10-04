@@ -17,6 +17,7 @@ const getCategories = async (req: Request, res: Response, next: NextFunction): P
     #swagger.description = 'Api for get all games categories.'
     #swagger.summary = 'Get all games categories.'
     #swagger.operationId = 'getGameCategories'
+    #swagger.autoQuery=false
 
     #swagger.responses[200] = {
       description: 'Successfully get all games categories !!' ,
@@ -41,6 +42,7 @@ const getGamesByCategory = async (req: Request, res: Response, next: NextFunctio
     #swagger.description = 'Api for get all games by category.'
     #swagger.summary = 'Get all games by category.'
     #swagger.operationId = 'getGamesByCategory'
+    #swagger.autoQuery=false
 
     #swagger.responses[200] = {
       description: 'Successfully get all games by category !!' ,

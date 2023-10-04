@@ -3,11 +3,7 @@ import { game_service } from "../services";
 import { ICommonResponse, IGame } from "src/interfaces";
 import { catchAsync } from "src/utility";
 
-const getGames = async (
-  req: Request,
-  res: Response,
-  next: NextFunction
-): Promise<ICommonResponse<IGame>> => {
+const getGames = async (req: Request, res: Response, next: NextFunction): Promise<ICommonResponse<IGame>> => {
   let page: number = parseInt(req.query.page as string);
   let itemNo: number = parseInt(req.query.itemNo as string);
   let game_type: string = req.query.game_type as string;
@@ -23,7 +19,13 @@ const getGames = async (
     #swagger.description = 'Api for get all games.'
     #swagger.summary = 'Get all games.'
     #swagger.operationId = 'getGames'
+    #swagger.autoQuery=false
 
+    #swagger.parameters['game_type'] = {
+      in: 'query',
+      description: 'Slug of game type.',
+      type: 'string',
+    }
     #swagger.responses[200] = {
       description: 'Successfully get all games !!' ,
       schema: { $ref: '#/definitions/GameList' }
@@ -44,7 +46,14 @@ const getGameDetailsBySlug = async (req: Request, res: Response, next: NextFunct
     #swagger.description = 'Api for get game detail.'
     #swagger.summary = 'Get game detail.'
     #swagger.operationId = 'getGameDetail'
-
+    #swagger.parameters['slug'] = {
+      description: "Slug of name", 
+      required: true
+    }
+    swagger.responses[404] = { 
+      description: 'Game record not found !!' 
+    }
+    
     #swagger.responses[200] = {
       description: 'Successfully get all games !!' ,
       schema: { $ref: '#/definitions/GameDetail' }

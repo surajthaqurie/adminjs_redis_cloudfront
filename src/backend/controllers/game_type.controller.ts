@@ -18,6 +18,7 @@ const getGameTypes = async (req: Request, res: Response, next: NextFunction): Pr
     #swagger.description = 'Api for get all games types.'
     #swagger.summary = 'Get all games types.'
     #swagger.operationId = 'getGameTypes'
+    #swagger.autoQuery=false
 
     #swagger.responses[200] = {
       description: 'Successfully get all games types !!' ,
@@ -40,7 +41,14 @@ const getGameTypeDetailsBySlug = async (req: Request, res: Response, next: NextF
     #swagger.description = 'Api for get games type detail.'
     #swagger.summary = 'Get games type detail.'
     #swagger.operationId = 'getGameTypeDetail'
-
+    #swagger.parameters['slug'] = {
+      description: "Slug of name", 
+      required: true
+    }
+    #swagger.responses[404] = { 
+      description: 'Game types records not found !!' 
+    }
+    
     #swagger.responses[200] = {
       description: 'Successfully get games type detail !!' ,
       schema: { $ref: '#/definitions/GameTypeDetail' }
