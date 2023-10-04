@@ -1,3 +1,4 @@
+import { bulkDeleteGameWithCategoryCache, deleteGameWithCategoryCache, saveGameWithCategoryCache, updateGameWithCategoryCache } from "src/hooks/redis-hooks";
 import { addGameWithCategoryValidation } from "../frontend/validations";
 import { payloadTrim, preventStoreGameCategoryDuplicationData } from "../hooks";
 import { DMMFClass, prisma } from "../utility";
@@ -16,21 +17,24 @@ const add_game_with_category_resource = {
       list: admin_seo_resource,
       new: {
         ...admin_seo_resource,
-        before: [
-          payloadTrim,
-          addGameWithCategoryValidation,
-          preventStoreGameCategoryDuplicationData
-        ]
+        before: [payloadTrim, addGameWithCategoryValidation, preventStoreGameCategoryDuplicationData],
+        after: [saveGameWithCategoryCache]
       },
       edit: {
         ...admin_seo_resource,
-        before: [
-          payloadTrim,
-          addGameWithCategoryValidation,
-          preventStoreGameCategoryDuplicationData
-        ]
+        before: [payloadTrim, addGameWithCategoryValidation, preventStoreGameCategoryDuplicationData],
+        after: [updateGameWithCategoryCache]
       },
-      delete: { ...delete_guard, ...admin_seo_resource }
+      delete: {
+        ...delete_guard,
+        ...admin_seo_resource,
+        after: [deleteGameWithCategoryCache]
+      },
+      bulkDelete: {
+        ...delete_guard,
+        ...admin_seo_resource,
+        after: [bulkDeleteGameWithCategoryCache]
+      }
     },
     filterProperties: ["GameCategory", "Game"],
     properties: {

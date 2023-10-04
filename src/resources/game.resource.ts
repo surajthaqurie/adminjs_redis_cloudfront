@@ -1,3 +1,4 @@
+import { saveGameCache, updateGameCache, deleteGameCache, bulkDeleteGameCache } from "src/hooks/redis-hooks";
 import { Components } from "../frontend/components";
 import { checkEditGameUniqueFields, checkGameUniqueFields, gameValidation } from "../frontend/validations";
 import { galleryImagesName, imageName, payloadTrim, slugify } from "../hooks";
@@ -17,14 +18,24 @@ const game_resource = {
       list: admin_seo_resource,
       new: {
         ...admin_seo_resource,
-        before: [payloadTrim, gameValidation, slugify, checkGameUniqueFields]
+        before: [payloadTrim, gameValidation, slugify, checkGameUniqueFields],
+        after: [saveGameCache]
       },
       edit: {
         ...admin_seo_resource,
         before: [payloadTrim, gameValidation, slugify, checkEditGameUniqueFields],
-        after: [imageName, galleryImagesName]
+        after: [imageName, galleryImagesName, updateGameCache]
       },
-      delete: { ...delete_guard, ...admin_seo_resource }
+      delete: {
+        ...delete_guard,
+        ...admin_seo_resource,
+        after: [deleteGameCache]
+      },
+      bulkDelete: {
+        ...delete_guard,
+        ...admin_seo_resource,
+        after: [bulkDeleteGameCache]
+      }
     },
     filterProperties: ["name"],
     properties: {

@@ -1,4 +1,4 @@
-import { TABLE_NAME_CONSTANT } from "src/constant";
+import { TABLE_NAME_CONSTANT } from "src/common/constant";
 import { IGameType, IPaginationResponse } from "src/interfaces";
 import { prisma, AppError, getListResponses, getKey, parseStringifyResponses, customListResponses, getData, customDetailsResponse } from "src/utility";
 

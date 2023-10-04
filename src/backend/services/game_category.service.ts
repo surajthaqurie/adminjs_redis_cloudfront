@@ -1,4 +1,4 @@
-import { SEARCH_TYPE_CONSTANT, TABLE_NAME_CONSTANT } from "src/constant";
+import { SEARCH_TYPE_CONSTANT, TABLE_NAME_CONSTANT } from "src/common/constant";
 import { IGameByCategory, IGameInCategory, IPaginationResponse } from "src/interfaces";
 import { prisma, getKey, getSearchResponse, customGameByCategoryResponse } from "src/utility";
 const { gameCategory: GameCategory } = prisma;

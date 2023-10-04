@@ -1,4 +1,4 @@
-import { SEARCH_TYPE_CONSTANT, TABLE_NAME_CONSTANT } from "src/constant";
+import { SEARCH_TYPE_CONSTANT, TABLE_NAME_CONSTANT } from "src/common/constant";
 import { IGame, IPaginationResponse } from "src/interfaces";
 import { prisma, AppError, getSearchResponse, getKey, getListResponses, parseStringifyResponses, customSearchResponse, customListResponses, getData, customDetailsResponse } from "src/utility";
 

@@ -1,24 +1,27 @@
-import { RedisClientType, createClient } from "redis";
+import { createClient } from "redis";
 
-let redisClient: RedisClientType;
-(() => {
+export const redisClientInit = () => {
   try {
     const REDIS_CONNECTION_URL = process.env.REDIS_CONNECTION_URL || null;
     if (!REDIS_CONNECTION_URL) throw new Error("Redis connection url is not set");
 
-    const redisClient = createClient({ url: process.env.REDIS_CONNECTION_URL as string });
-    redisClient.connect();
-    redisClient.on("ready", () => {
+    const client = createClient({ url: process.env.REDIS_CONNECTION_URL as string });
+    client.connect();
+    client.on("ready", () => {
       console.log("Redis connection successfully !!");
     });
 
-    redisClient.on("error", (err) => {
+    client.on("error", (err) => {
       console.log("Redis Client Connection Error: ", err);
     });
+
+    return client;
   } catch (error) {
     throw error;
   }
-})();
+};
+
+const redisClient = redisClientInit();
 
 /* String-base data */
 export const saveData = async (key: string, data: any, timeout = 60 * 60 * 3): Promise<string | null> => {
