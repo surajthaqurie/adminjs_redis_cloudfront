@@ -8,6 +8,7 @@
     "prod": "rimraf build && npm run gen:api_docs && tsc && tsc-alias && npm run copyAssets",
     "dev": "npm run gen:api_docs && nodemon --exec npx ts-node app.ts",
     "start:migrate": "bash scripts/create-admin.sh",
+    "start:migrate:assets": "bash ./scripts/assets-migrate.sh",
     "copyAssets": "copyfiles -f public/*.css public/*.png public/*.json build/public",
     "gen:api_docs": "ts-node src/utility/swagger.ts",
     "test": "echo \"Error: no test specified\" && exit 1"
