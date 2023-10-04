@@ -77,9 +77,7 @@ const start = async (): Promise<void> => {
   server.listen(PORT, (): void => {
     console.log(`Server is started on ${process.env.APP_URL}`);
     console.log(`Admin panel is started on ${process.env.APP_URL}/api-docs`);
-    console.log(
-      `Admin panel is started on ${process.env.APP_URL}${admin.options.rootPath}`
-    );
+    console.log(`Admin panel is started on ${process.env.APP_URL}${admin.options.rootPath}`);
   });
 };
 
