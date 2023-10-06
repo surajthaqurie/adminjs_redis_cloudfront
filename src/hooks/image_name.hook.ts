@@ -13,7 +13,7 @@ export const imageName = async (originalResponse: ActionResponse, request: Actio
 export const galleryImagesName = async (originalResponse: ActionResponse, request: ActionRequest, context: ActionContext): Promise<ActionResponse> => {
   const validGalleryKey = (i = 0) => {
     if (originalResponse.record && originalResponse.record.params[`gallery.key.${i}`]) {
-      originalResponse.record.params[`gallery.key.${i}`] = originalResponse.record.params[`gallery.key.${i}`].split("~~")[1];
+      originalResponse.record.params[`gallery.key.${i}`] = originalResponse.record.params[`gallery.filename.${i}`];
       i++;
       validGalleryKey(i);
     }
